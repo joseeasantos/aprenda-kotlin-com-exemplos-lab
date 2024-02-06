@@ -1,21 +1,49 @@
-// [Template no Kotlin Playground](https://pl.kotl.in/WcteahpyN)
+enum class Nivel { BASICO, INTERMEDIARIO, AVANCADO }
 
-enum class Nivel { BASICO, INTERMEDIARIO, DIFICIL }
+class Usuario(val nome: String, val email: String, val whatsapp: String)
 
-class Usuario
+data class ConteudoEducacional(val nome: String, val nivel: Nivel, val duracao: Int = 60)
 
-data class ConteudoEducacional(var nome: String, val duracao: Int = 60)
+data class Formacao(val nome: String, val conteudos: List<ConteudoEducacional>) {
 
-data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>) {
-
-    val inscritos = mutableListOf<Usuario>()
+    var inscritos = mutableListOf<Usuario>()
     
-    fun matricular(usuario: Usuario) {
-        TODO("Utilize o parâmetro $usuario para simular uma matrícula (usar a lista de $inscritos).")
+    fun matricular(usuario : Usuario) {
+        inscritos.add(usuario)
     }
+    
+    fun matricular(usuarios : Collection<Usuario>){
+        inscritos.addAll(usuarios)
+    }
+   
+}
+
+
+fun gerarSaidaDeInformacao(formacao: Formacao) {
+    println("Formação:  ${formacao.nome} (inscrições: ${formacao.inscritos?.size ?: 0})")
+    formacao.inscritos?.forEach{ i -> println(i.nome)}
+
 }
 
 fun main() {
-    TODO("Analise as classes modeladas para este domínio de aplicação e pense em formas de evoluí-las.")
-    TODO("Simule alguns cenários de teste. Para isso, crie alguns objetos usando as classes em questão.")
+ 
+    //criando formação Desbravando Kotlin
+    var desbravandoKotlin : Formacao = Formacao("Desbravando Kotlin", 
+                                                listOf(	ConteudoEducacional("modulo 1", Nivel.BASICO, 2),
+                         			            		ConteudoEducacional("Modulo 2", Nivel.INTERMEDIARIO, 12),
+                                    					ConteudoEducacional("Modulo 3", Nivel.AVANCADO, 3)
+    ))
+    
+    gerarSaidaDeInformacao(desbravandoKotlin)
+    //adicionando matrículas / usuários à formação já criada
+    desbravandoKotlin.matricular(Usuario("José Espedito", "jose@gmail", "62991100000")).also{
+        gerarSaidaDeInformacao(desbravandoKotlin)
+    }
+    
+    desbravandoKotlin.matricular(listOf(Usuario("João", "joao@gmail", "62999999999"), 
+                                        Usuario("Maria", "maria@outlook", "2199999999"),
+                                        Usuario("Bartolomeu", "barto@gmail.com", "1198888888"))).also{
+        gerarSaidaDeInformacao(desbravandoKotlin)
+    }
+    
 }
