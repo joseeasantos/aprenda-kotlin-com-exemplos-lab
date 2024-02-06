@@ -15,15 +15,15 @@ data class Formacao(val nome: String, val conteudos: List<ConteudoEducacional>) 
     fun matricular(usuarios : Collection<Usuario>){
         inscritos.addAll(usuarios)
     }
+
+    fun gerarSaidaDeInformacao() {
+        println("Formação:  ${this.nome} (inscrições: ${this.inscritos?.size ?: 0})")
+        this.inscritos?.forEach{ i -> println(i.nome)}
+
+    }
    
 }
 
-
-fun gerarSaidaDeInformacao(formacao: Formacao) {
-    println("Formação:  ${formacao.nome} (inscrições: ${formacao.inscritos?.size ?: 0})")
-    formacao.inscritos?.forEach{ i -> println(i.nome)}
-
-}
 
 fun main() {
  
@@ -34,16 +34,20 @@ fun main() {
                                     					ConteudoEducacional("Modulo 3", Nivel.AVANCADO, 3)
     ))
     
-    gerarSaidaDeInformacao(desbravandoKotlin)
+    desbravandoKotlin.gerarSaidaDeInformacao()
     //adicionando matrículas / usuários à formação já criada
     desbravandoKotlin.matricular(Usuario("José Espedito", "jose@gmail", "62991100000")).also{
-        gerarSaidaDeInformacao(desbravandoKotlin)
+        desbravandoKotlin.gerarSaidaDeInformacao()
     }
     
-    desbravandoKotlin.matricular(listOf(Usuario("João", "joao@gmail", "62999999999"), 
+    //adicionando uma lista de usuários
+    with (desbravandoKotlin){
+      matricular(listOf(Usuario("João", "joao@gmail", "62999999999"), 
                                         Usuario("Maria", "maria@outlook", "2199999999"),
                                         Usuario("Bartolomeu", "barto@gmail.com", "1198888888"))).also{
-        gerarSaidaDeInformacao(desbravandoKotlin)
+        gerarSaidaDeInformacao()
+      }    
     }
+    
     
 }
